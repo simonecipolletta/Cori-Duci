@@ -1,0 +1,22 @@
+# Ambienti Virtuali
+.venv/
+venv/
+env/
+ENV/
+# Credenziali e Variabili d'Ambiente (Aggiungi qui eventuali file JSON con API Key)
+.env
+Credenziali/
+segreti.json
+# Database Locali di Sviluppo
+db.sqlite3
+*.sqlite3
+*.db
+# File temporanei di compilazione Python
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.py[cod]
+# File caricati dagli utenti (Media) e Asset raccolti
+media/
+staticfiles/
