@@ -91,6 +91,9 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST', '127.0.0.1'),
         'PORT': os.getenv('DB_PORT', '5432'),
+        "OPTIONS": {
+            "pool": True,
+        },
     }
 }
 
@@ -117,9 +120,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'it-it'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Rome'
 
 USE_I18N = True
 
@@ -129,9 +132,45 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+
+
+# cors allowed origins permette al frontend di accedere alle API del backend durante lo sviluppo
+
+# In produzione, dovresti configurare CORS in modo più restrittivo o utilizzare un reverse proxy per servire sia il frontend che il backend dallo stesso dominio.
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Indirizzo di sviluppo locale di Vue
+    "http://127.0.0.1:5173",
 ]
+
+# Cartella fisica dove verranno salvate le immagini caricate (se ti serviranno in futuro)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Prefisso URL per accedere a quei file
+MEDIA_URL = '/media/'
+
+# Chiavi reCAPTCHA (Fondamentali per la tua views.py!)
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
+RECAPTCHA_VERSION = 'v3'
+
+# RIGA NECESSARIA PER TESTARE IL FUNZIONAMENTO DELL'EMAIL IN LOCALE
+# Stampa l'email nel terminale invece di cercare di spedirla per davvero
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# 1. I "Buttafuori" per i form Vue (FONDAMENTALE)
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+# 2. Permessi di base per Django Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}

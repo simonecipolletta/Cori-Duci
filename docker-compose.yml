@@ -16,6 +16,7 @@ services:
     container_name: coriduci_web
     command: sh -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:8000"
     volumes:
+      - .:/app # da togliere in produzione evita di farmi usare il comando docker compose up -d --build a ogni cambiamento della view e del model
       - ./media:/app/media  # Il ponte per le immagini
     ports:
       - "8001:8000"

@@ -1,0 +1,395 @@
+/* ========================= RESET & BASE ========================= */
+
+html {
+    scroll-behavior: smooth;
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Fondamentale per gestire le larghezze correttamente */
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--font-main);
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+
+:root {
+    --color-primary: #CCAA54;
+    --color-secondary: #f0e1c3;
+    --color-accent: #A0242D;
+    --color-text: #1E293B ;
+    --color-background: #fbfbfe;
+    --font-main:'Poppins', sans-serif;;
+    --font-title: 'Great Vibes', cursive;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text);
+}
+
+p, a, li {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+/* Tipografia Fluida per i titoli */
+h1 {
+    font-size: clamp(2rem, 4vw + 1rem, 2.5rem);
+    font-weight: bold;
+}
+
+h2 {
+    font-size: clamp(1.75rem, 3vw + 1rem, 2rem);
+    font-weight: bold;
+}
+
+h3 {
+    font-size: clamp(1.25rem, 2vw + 0.8rem, 1.5rem);
+    font-weight: bold;
+}
+
+h4 {
+    font-size: clamp(1.25rem, 2vw + 0.5rem, 1.5rem);
+    font-weight: bold;
+}
+
+h5 {
+    font-size: clamp(1.125rem, 1.5vw + 0.5rem, 1.25rem);
+    font-weight: bold;
+}
+
+h6 {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+p {
+    font-size: 1rem;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Per permettere a Vue di gestire l'intero layout senza interferenze */
+/* Fingi che il div con id 'app' non esista come scatola fisica.
+Prendi tutti i suoi figli (header, main, footer) e trattali spazialmente
+come se fossero figli diretti del suo genitore (il body)*/
+
+#app {
+    display: contents;
+}
+
+/* great-vibes-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Great Vibes';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/great-vibes-v21-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* poppins-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/poppins-v24-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* ========================= HEADER & NAV ========================= */
+
+header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    background-color: var(--color-primary);
+    z-index: 1002;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ========================= NAV MOBILE ========================= */
+
+#toggle-menu {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1003;
+    position: absolute;
+    right: 20px;
+    top:50%;
+    transform: translateY(-50%);
+}
+
+.nav-mobile{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1001;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.6s ease-in-out;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}  
+
+.nav-mobile.active {
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.6s ease-in-out;
+}
+
+.nav-desktop {
+    display:none;
+}
+
+.left-side, .right-side {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* justify-content: center; */
+    align-items: center;
+    height: 100%;
+    padding-top: 35vh;
+    transition: transform 0.6s ease-in-out;
+}
+
+.left-side {
+    background-color: var(--color-primary);
+    transform: translateX(-100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.right-side {
+    background-color: var(--color-primary);
+    transform: translateX(100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.nav-mobile.active .left-side {
+    transform: translateX(0);
+}
+
+.nav-mobile.active .right-side {
+    transform: translateX(0);
+}
+
+.logo {
+    width: 90px;
+    height: auto;
+    position: relative;
+    z-index: 1004;
+    transition: opacity 0.2s ease-in-out;
+    transform-origin: center center;
+}
+
+.logo-hidden {
+    opacity: 0;
+}
+
+.animationClass {
+    transform: translate(calc(50vw - 65px), 150px) scale(2.5); /* 125 sono la metà della nuova larghezza, 150px è la distanza verticale desiderata */
+}
+
+.menu-list {
+    list-style: none;
+    font-weight: bold;
+}
+
+.nav-mobile .menu-list li{
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.nav-mobile.active .menu-list li {
+    transform: translateX(0);
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    opacity: 1;
+}
+
+.nav-mobile.active .menu-list li{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nav-mobile.active .menu-list li:nth-child(1) {
+    transition-delay: 0.5s;
+}
+
+/* Il secondo link (Servizi) appare dopo 0.7s */
+.nav-mobile.active .menu-list li:nth-child(2) {
+    transition-delay: 0.7s;
+}
+
+/* Il terzo link (Contatti) appare dopo 0.9s */
+.nav-mobile.active .menu-list li:nth-child(3) {
+    transition-delay: 0.9s;
+}
+
+/* ========================= NAV DESKTOP ========================= */
+
+@media (min-width: 768px) {
+    header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 40px;
+    }
+
+    .nav-mobile, #toggle-menu {
+        display: none;
+    }
+
+    .nav-desktop {
+        display: flex;
+        flex: 1;
+    }
+
+    .nav-desktop .menu-list {
+        display: flex;
+        width: 100%;
+        gap: 30px;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    .menu-list li {
+        font-weight: bold;
+    }
+}
+
+/* ========================= MAIN ========================= */
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--color-background);
+}
+
+main{
+    flex: 1;
+    display: flex; /* Aggiungi questo */
+    flex-direction: column; /* Aggiungi questo */
+}
+
+/* ========================= FOOTER ========================= */
+
+footer {
+    margin-top: auto;
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: baseline;
+    padding: 20px;
+}
+
+.contacts-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flex-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-logo {
+    width: 80px;
+    height: auto;
+}
+
+.social-container {
+    margin-top: 10px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-link {
+    display: inline-flex;
+    color: var(--color-text); /* Le rende bianche di base */
+    transition: transform 0.3s ease, color 0.3s ease; /* Transizione fluida */
+}
+
+.social-icon-svg {
+    width: 32px;
+    height: 32px;
+    fill: currentColor; /* Prende il colore dal tag <a> genitore! */
+}
+
+.copyright {
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-text);
+}
+
+.copyright p {
+    font-size: 0.85rem;
+}
+
+.grecaptcha-badge {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.recaptcha-disclaimer {
+    font-size: 0.7rem;
+    color: #666;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .flex-footer {
+        flex-direction: row;
+        gap: 40px;
+    }
+}

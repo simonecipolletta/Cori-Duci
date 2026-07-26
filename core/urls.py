@@ -14,19 +14,33 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls import static
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.views.generic import TemplateView
 from django.views.static import serve
-from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # LE API DEVONO STARE PRIMA DEL CATCH-ALL
+    path('api/', include('products.urls')),
+    path('api/contatti/', include('contacts.urls')),
 ]
+# Aggiungi questa parte per servire i file multimediali durante lo sviluppo
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
+# AGGIUNGI QUESTO BLOCCO ALLA FINE DEL FILE:
 # Forza Django a servire i file Media anche con DEBUG=False
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT,
     }),
+]
+
+# 3. CATCH-ALL (DEVE STARE TASSATIVAMENTE ALLA FINE)
+urlpatterns += [
+    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ]
